@@ -1,20 +1,25 @@
 import React, { Component, PropTypes } from 'react'
 
-const getStyles = (color, size) => ({
-  svg: {
-    width: size,
-    height: size,
-  },
-  path: {
-    stroke: color,
-    strokeLinecap: 'round',
-  },
-})
+const getStyles = (color, size, radius) => {
+  const circumference = 2 * radius * Math.PI
+  return {
+    svg: {
+      width: size,
+      height: size,
+    },
+    path: {
+      stroke: color,
+      strokeLinecap: 'round',
+      strokeDasharray: `${circumference * 0.9}`,
+    },
+  }
+}
 
 class Loader extends Component {
   render() {
     const { color, size, thickness } = this.props
-    const styles = getStyles(color, size)
+    const radius = (size - thickness) / 2
+    const styles = getStyles(color, size, radius)
     return (
       <svg style={styles.svg}>
         <circle
@@ -22,9 +27,9 @@ class Loader extends Component {
           style={styles.path}
           cx={size / 2}
           cy={size / 2}
-          r={(size - thickness) / 2}
+          r={radius}
           fill="none"
-          strokeWidth={2}
+          strokeWidth={thickness}
           strokeMiterlimit="20"
         />
       </svg>
