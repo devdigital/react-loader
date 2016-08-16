@@ -1,2 +1,3 @@
-# redux-starter-kit
-Basic starter for React + Redux + React Router + Immutable.js + Webpack
+# react-loader
+
+Simple rotating loader using CSS keyframe animation in modern browsers, and a JavaScript fallback for older browsers.

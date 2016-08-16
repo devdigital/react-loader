@@ -21,7 +21,6 @@ const getStyles = (color, size, radius) => {
   }
 }
 
-// Adapted from https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Detecting_CSS_animation_support
 class Loader extends Component {
   constructor(props) {
     super(props)
