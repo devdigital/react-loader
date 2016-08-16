@@ -122,6 +122,7 @@ class Loader extends Component {
 
   render() {
     const {
+      height,
       color,
       size,
       thickness,
@@ -132,7 +133,7 @@ class Loader extends Component {
       overlay,
       overlayColor,
       overlayOpacity,
-      height,
+      contentOpacity,
     } = this.props
 
     if (!loading) {
@@ -166,7 +167,7 @@ class Loader extends Component {
 
       return (
         <div style={{ position: 'relative' }}>
-          {overlay ? React.cloneElement(children, { style: { opacity: 0.3 } }) : null}
+          {overlay ? React.cloneElement(children, { style: { opacity: contentOpacity } }) : null}
           {overlay ? <div style={Object.assign({}, stretchStyle, overlayStyle)}></div> : null}
           <div style={Object.assign({}, stretchStyle, { display: 'table', height, zIndex: 11 })}>
             <div style={Object.assign({}, loadingElementStyle)}>
@@ -193,6 +194,7 @@ Loader.propTypes = {
   overlay: PropTypes.bool,
   overlayColor: PropTypes.string,
   overlayOpacity: PropTypes.number,
+  contentOpacity: PropTypes.number,
 }
 
 Loader.defaultProps = {
@@ -205,6 +207,7 @@ Loader.defaultProps = {
   overlay: true,
   overlayColor: '#000',
   overlayOpacity: 0.5,
+  contentOpacity: 0.3,
 }
 
 export default Loader
