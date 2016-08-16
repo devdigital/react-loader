@@ -1,4 +1,9 @@
 import React, { Component, PropTypes } from 'react'
+import {
+  isAnimationSupported,
+  ensureStyleSheet,
+  ensureStyleSheetRule,
+} from '../utils/css-utils'
 
 const getStyles = (color, size, radius) => {
   const circumference = 2 * radius * Math.PI
@@ -16,20 +21,48 @@ const getStyles = (color, size, radius) => {
   }
 }
 
+// Adapted from https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_Animations/Detecting_CSS_animation_support
 class Loader extends Component {
   constructor(props) {
     super(props)
+
+    this.animation = isAnimationSupported()
+    this.styleSheetId = 'reactloaderstyles'
+    this.keyframesId = 'reactloaderstyleskeyframes'
+
     this.state = {
       rotationDegrees: 0,
     }
   }
 
   componentDidMount() {
+    if (this.animation.supported) {
+      this.ensureKeyframesAnimation(
+        this.styleSheetId,
+        this.keyframesId,
+        this.animation.keyframePrefix)
+      return
+    }
+
     this.rotate(0)
   }
 
   componentWillUnmount() {
+    if (this.animation.supported) {
+      return
+    }
+
     clearTimeout(this.rotateTimer)
+  }
+
+  ensureKeyframesAnimation(styleSheetId, keyframesId, keyframePrefix) {
+    const keyframesSelector = `@${keyframePrefix}keyframes ${keyframesId}`
+    const keyframesRules =
+      `from { ${keyframePrefix} transform: rotateZ(0deg) }
+       to { ${keyframePrefix} transform: rotateZ(360deg) }`
+
+    const stylesheet = ensureStyleSheet(styleSheetId)
+    ensureStyleSheetRule(stylesheet, keyframesSelector, keyframesRules, 0)
   }
 
   rotate(degrees) {
@@ -44,15 +77,23 @@ class Loader extends Component {
     const { color, size, thickness } = this.props
     const radius = (size - thickness) / 2
     const styles = getStyles(color, size, radius)
-    const baseStyle = {
+
+    const rotationStyle = {
       display: 'inline-block',
       width: `${size}px`,
       height: `${size}px`,
       transformOrigin: 'center center',
-      transform: `rotateZ(${this.state.rotationDegrees}deg)`,
     }
+
+    if (this.animation.supported) {
+      rotationStyle[this.animation.animationString]
+        = `${this.keyframesId} 1s linear infinite`
+    } else {
+      rotationStyle.transform = `rotateZ(${this.state.rotationDegrees}deg)`
+    }
+
     return (
-      <div style={baseStyle}>
+      <div style={rotationStyle}>
         <svg style={styles.svg}>
           <circle
             ref="path"
