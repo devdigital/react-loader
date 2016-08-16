@@ -73,15 +73,32 @@ class Loader extends Component {
   }
 
   render() {
-    const { color, size, thickness } = this.props
+    const {
+      color,
+      size,
+      thickness,
+      text,
+      textStyle,
+    } = this.props
+
     const radius = (size - thickness) / 2
     const styles = getStyles(color, size, radius)
 
+    const tableStyle = {
+      display: 'table-cell',
+      verticalAlign: 'middle',
+      textAlign: 'center',
+    }
+
     const rotationStyle = {
-      display: 'inline-block',
       width: `${size}px`,
       height: `${size}px`,
+      margin: '0 auto',
       transformOrigin: 'center center',
+    }
+
+    const textBaseStyle = {
+      margin: '0.2rem 0',
     }
 
     if (this.animation.supported) {
@@ -96,20 +113,25 @@ class Loader extends Component {
     }
 
     return (
-      <div style={rotationStyle}>
-        <svg style={styles.svg}>
-          <circle
-            ref="path"
-            style={styles.path}
-            cx={size / 2}
-            cy={size / 2}
-            r={radius}
-            fill="none"
-            strokeWidth={thickness}
-            strokeMiterlimit="20"
-          />
-        </svg>
+      <div>
+      <div style={tableStyle}>
+        <div style={rotationStyle}>
+          <svg style={styles.svg}>
+            <circle
+              ref="path"
+              style={styles.path}
+              cx={size / 2}
+              cy={size / 2}
+              r={radius}
+              fill="none"
+              strokeWidth={thickness}
+              strokeMiterlimit="20"
+            />
+          </svg>
+        </div>
+        <p style={Object.assign(textBaseStyle, textStyle)}>{text}</p>
       </div>
+    </div>
     )
   }
 }
@@ -118,12 +140,17 @@ Loader.propTypes = {
   color: PropTypes.string,
   size: PropTypes.number,
   thickness: PropTypes.number,
+  loading: PropTypes.boolean,
+  text: PropTypes.string,
+  textStyle: PropTypes.object,
 }
 
 Loader.defaultProps = {
   color: '#000',
   size: 20,
   thickness: 2,
+  loading: false,
+  text: 'Loading',
 }
 
 export default Loader

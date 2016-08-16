@@ -4,9 +4,12 @@ import Loader from '../src/Loader'
 
 ReactDOM.render(
   <div>
-    <Loader />
-    <Loader />
-    <Loader />
+    <Loader size={40} />
+    <Loader>
+      <div>
+        <p>Some content</p>
+      </div>
+    </Loader>
   </div>,
   document.getElementById('root')
 )
