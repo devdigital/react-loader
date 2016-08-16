@@ -88,6 +88,10 @@ class Loader extends Component {
       rotationStyle[this.animation.animationString]
         = `${this.keyframesId} 1s linear infinite`
     } else {
+      const prefixes = 'ms Webkit'.split(' ')
+      for (const prefix of prefixes) {
+        rotationStyle[`${prefix}Transform`] = `rotateZ(${this.state.rotationDegrees}deg)`
+      }
       rotationStyle.transform = `rotateZ(${this.state.rotationDegrees}deg)`
     }
 
